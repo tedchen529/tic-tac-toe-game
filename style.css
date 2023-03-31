@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+}
+
+:root {
+  --cell-size: 100px;
+  --mark-size: calc(var(--cell-size) * 0.9);
+}
+
+.board {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  align-items: center;
+  /* Tutorial says that justify and align items to make sure O and X are centered. Doesn't seem necessary? */
+  grid-template-columns: repeat(3, auto);
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid black;
+  cursor: pointer;
+  display: flex;
+  /* Why is display: flex needed to make O or X position properly? */
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.cell:nth-child(1),
+.cell:nth-child(2),
+.cell:nth-child(3) {
+  border-top: 0;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: 0;
+}
+
+.cell:nth-child(3n + 3) {
+  border-right: 0;
+}
+
+.cell:nth-child(9),
+.cell:nth-child(8),
+.cell:nth-child(7) {
+  border-bottom: 0;
+}
+
+.cell.o,
+.cell.x {
+  cursor: not-allowed;
+}
+
+.cell.x::before,
+.cell.x::after,
+.cell.o::before {
+  background-color: black;
+}
+
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after,
+.board.o .cell:not(.x):not(.o):hover::before {
+  background-color: lightgrey;
+}
+
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after {
+  content: "";
+  height: var(--mark-size);
+  width: calc(var(--mark-size) * 0.15);
+  position: absolute;
+  /* Why does the default static or relative position make the X look weird? */
+}
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.o):hover::before {
+  transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.o):hover::after {
+  transform: rotate(-45deg);
+}
+
+.cell.o::before,
+.cell.o::after,
+.board.o .cell:not(.x):not(.o):hover::before,
+.board.o .cell:not(.x):not(.o):hover::after {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+}
+
+.cell.o::before,
+.board.o .cell:not(.x):not(.o):hover::before {
+  height: var(--mark-size);
+  width: var(--mark-size);
+}
+
+.cell.o::after,
+.board.o .cell:not(.x):not(.o):hover::after {
+  height: calc(var(--mark-size) * 0.7);
+  width: calc(var(--mark-size) * 0.7);
+  background-color: white;
+}
+
+.winning-msg {
+  display: none;
+  position: fixed;
+  /* Why not set position: absolute? */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 80%);
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 5rem;
+  flex-direction: column;
+}
+
+#winning-msg__btn {
+  font-size: 3rem;
+  background-color: white;
+  border: 1px solid black;
+  padding: 0.25em 0.5em;
+  cursor: pointer;
+}
+
+#winning-msg__btn:hover {
+  background-color: black;
+  color: white;
+  border-color: white;
+}
+
+.winning-msg.show {
+  display: flex;
+}
